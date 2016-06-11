@@ -1,0 +1,6 @@
+name = "App-SlackBot-YahooTrainInfo"
+# badges = ["travis"]
+authority="cpan:TSUCCHI"
+
+module_maker="ModuleBuildTiny"
+
