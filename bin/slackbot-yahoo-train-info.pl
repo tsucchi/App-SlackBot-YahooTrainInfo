@@ -1,5 +1,8 @@
 #!/usr/bin/perl
 use v5.20;
+use FindBin;
+use File::Spec;
+use lib File::Spec->catdir($FindBin::Bin, '..', 'lib');
 use App::SlackBot::YahooTrainInfo;
 use Config::Pit;
 

@@ -14,6 +14,7 @@ requires 'JSON::XS';
 requires 'Moo';
 requires 'Selenium::PhantomJS';
 requires 'Selenium::Remote::Driver';
+requires 'IO::Socket::SSL';
 requires 'perl', 'v5.20.0';
 
 on configure => sub {
