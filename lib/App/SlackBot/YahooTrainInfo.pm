@@ -9,12 +9,12 @@ binmode STDOUT, ':utf8';
 
 use Furl;
 use HTTP::Request::Common;
-use Selenium::Remote::Driver;
-use Selenium::PhantomJS;
+use Web::Query;
 use JSON::XS;
 use File::Slurp;
 use Encode;
 use AnyEvent;
+
 
 has token => (
     is => 'ro',
@@ -30,16 +30,7 @@ has train_info_url => (
 has train_info_trouble_line_element_css => (
     is => 'ro',
     required => 1,
-    default => 'div#mdStatusTroubleLine table tbody tr',
-);
-
-has driver => (
-    is => 'ro',
-    required => 1,
-    lazy => 1,
-    builder => sub {
-        return Selenium::PhantomJS->new();
-    },
+    default => 'div#mdStatusTroubleLine table tr',
 );
 
 has slack_user => (
@@ -115,16 +106,19 @@ sub _read_previous_message {
 
 sub _scrape_train_info {
     my ($self) = @_;
-    my $driver = $self->driver;
-    $driver->get($self->train_info_url);
-    my @elements = $driver->find_elements($self->train_info_trouble_line_element_css, 'css');
 
-    shift @elements; #ヘッダを捨てる
-    my @mes = map { $_->get_text } @elements;
-    if ( @mes ) {
-        unshift @mes, $self->train_info_url;
+    my @messages;
+    wq($self->train_info_url)
+        ->find($self->train_info_trouble_line_element_css)
+        ->each(sub {
+            push @messages, $_->text;
+        }) ;
+
+    shift @messages; #ヘッダを捨てる
+    if ( @messages ) {
+        unshift @messages, $self->train_info_url;
     }
-    my $message = join("\n", @mes);
+    my $message = join("\n", @messages);
     return $message;
 }
 
@@ -144,14 +138,6 @@ sub _post_to_slack {
         die $res->status . ":" .$res->message
     }
 }
-
-sub DESTROY {
-    my ($self) = @_;
-    if ( defined $self->driver ) {
-        $self->driver->quit();
-    }
-}
-
 
 1;
 __END__
