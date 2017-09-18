@@ -11,8 +11,7 @@ requires 'Furl';
 requires 'HTTP::Request::Common';
 requires 'JSON::XS';
 requires 'Moo';
-requires 'Selenium::PhantomJS';
-requires 'Selenium::Remote::Driver';
+requires 'Web::Query';
 requires 'IO::Socket::SSL';
 requires 'perl', 'v5.20.0';
 
