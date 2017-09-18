@@ -4,9 +4,12 @@ use FindBin;
 use File::Spec;
 use lib File::Spec->catdir($FindBin::Bin, '..', 'lib');
 use App::SlackBot::YahooTrainInfo;
-use Config::Pit;
 
-my $config = pit_get('slackbot_yahoo_train_info');
+my $token = $ENV{SLACKBOT_YAHOO_TRAIN_INFO_SLACK_TOKEN};
 
-my $app = App::SlackBot::YahooTrainInfo->new( token => $config->{token} );
+if ( !defined $token ) {
+    die "SLACKBOT_YAHOO_TRAIN_INFO_SLACK_TOKEN is not set";
+}
+
+my $app = App::SlackBot::YahooTrainInfo->new( token => $token );
 $app->run();

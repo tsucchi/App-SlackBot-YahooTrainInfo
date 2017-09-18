@@ -5,7 +5,6 @@ on 'test' => sub {
 };
 
 requires 'AnyEvent';
-requires 'Config::Pit';
 requires 'Encode';
 requires 'File::Slurp';
 requires 'Furl';

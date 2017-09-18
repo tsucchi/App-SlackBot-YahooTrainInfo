@@ -30,3 +30,4 @@ MYMETA.*
 
 /App-SlackBot-YahooTrainInfo-*
 /previous.txt
+/.env
